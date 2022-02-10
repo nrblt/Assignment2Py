@@ -1,0 +1,116 @@
+{% extends 'partials/base.html' %}
+
+{% block content %}
+
+    <div class="container" >
+        <br>
+        <table class="table" style="border: 1px solid black;">
+            <thead>
+                <tr>
+                    <th scope="col">Rank</th>
+                    <th scope="col">Address</th>
+                    <th scope="col">Balance</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in addresses %}
+                <tr>
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ item.account }}</td>
+                    <td>{{ item.balance }} Ether</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <br><hr><br>
+        <h4>Bar Chart</h4>
+        <canvas id="myChart1" width="400" height="400"></canvas>
+
+        <br><hr><br>
+        <h4>Linear Chart</h4>
+        <canvas id="myChart2" width="400" height="400"></canvas>
+
+
+
+        <br><hr><br>
+        <h4>Pie Chart</h4>
+        <canvas id="myChart3" width="400" height="400"></canvas>
+        <br><br><br>
+
+        <script>
+            const ctx1 = document.getElementById('myChart1').getContext('2d');
+            const myChart1 = new Chart(ctx1, {
+                type: 'bar',
+                data: {
+                    labels: [{% for address in addresses %} '{{ address.account }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ addresses|length }} of Addresses',
+                        data: [{% for address in addresses %} '{{ address.balance }}', {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            const ctx2 = document.getElementById('myChart2').getContext('2d');
+            const myChart2 = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: [{% for address in addresses %} '{{ address.account }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ addresses|length }} of Addresses',
+                        data: [{% for address in addresses %} '{{ address.balance }}', {% endfor %}],
+                        fill: false,
+                        borderColor: 'rgb(75, 192, 192)',
+                        tension: 0.1
+                    }]
+                }
+            });
+
+            const ctx3 = document.getElementById('myChart3').getContext('2d');
+            const myChart3 = new Chart(ctx3, {
+                type: 'doughnut',
+                data: {
+                    labels: [{% for address in addresses %} '{{ address.account }}', {% endfor %}],
+                    datasets: [{
+                        label: '{{ addresses|length }} of Addresses',
+                        data: [{% for address in addresses %} '{{ address.balance }}', {% endfor %}],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(255, 159, 64, 0.2)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+            });
+        </script>
+    </div>
+
+{% endblock %}
